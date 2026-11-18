@@ -1,3 +1,7 @@
+package br.com.jean.lolapirest.model;
+
+import java.time.LocalDateTime;
+
 public abstract class Partida {
     private Long id;
     private Jogador jogador;

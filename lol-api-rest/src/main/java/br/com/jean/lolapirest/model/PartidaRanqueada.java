@@ -1,3 +1,7 @@
+package br.com.jean.lolapirest.model;
+
+import java.time.LocalDateTime;
+
 public class PartidaRanqueada extends Partida{
     private int pdlVariacao;
 

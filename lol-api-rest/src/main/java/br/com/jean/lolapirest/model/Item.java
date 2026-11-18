@@ -1,3 +1,5 @@
+package br.com.jean.lolapirest.model;
+
 public class Item{
     private Long id;
     private String nome;

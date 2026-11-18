@@ -1,3 +1,7 @@
+package br.com.jean.lolapirest.model;
+
+import java.time.LocalDateTime;
+
 public class PartidaCasual extends Partida{
     private String modoJogo;
 

@@ -1,3 +1,7 @@
+package br.com.jean.lolapirest.model;
+
+import java.time.LocalDateTime;
+
 public class Jogador {
     private Long id;
     private String apelido;
