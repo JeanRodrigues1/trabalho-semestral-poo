@@ -1,31 +1,31 @@
-CREATE TABLE jogador (
+CREATE TABLE IF NOT EXISTS jogador (
     id BIGINT PRIMARY KEY,
     apelido VARCHAR(50) NOT NULL UNIQUE,
     regiao VARCHAR(50) NOT NULL,
     data_cadastro TIMESTAMP NOT NULL
 );
 
-CREATE TABLE campeao (
+CREATE TABLE IF NOT EXISTS campeao (
     id BIGINT PRIMARY KEY,
     nome VARCHAR(50) NOT NULL,
     classe_principal VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE item (
+CREATE TABLE IF NOT EXISTS item (
     id BIGINT PRIMARY KEY,
     nome VARCHAR(50) NOT NULL,
     custo INT NOT NULL,
     tipo VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE runa (
+CREATE TABLE IF NOT EXISTS runa (
     id BIGINT PRIMARY KEY,
     nome VARCHAR(50) NOT NULL,
     caminho VARCHAR(50) NOT NULL,
     tipo VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE partida (
+CREATE TABLE IF NOT EXISTS partida (
     id BIGINT PRIMARY KEY,
     jogador_id BIGINT NOT NULL,
     campeao_id BIGINT NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE partida (
     CONSTRAINT fk_partida_campeao FOREIGN KEY (campeao_id) REFERENCES campeao(id)
 );
 
-CREATE TABLE partida_item (
+CREATE TABLE IF NOT EXISTS partida_item (
     partida_id BIGINT NOT NULL,
     item_id BIGINT NOT NULL,
     PRIMARY KEY (partida_id, item_id),
@@ -52,7 +52,7 @@ CREATE TABLE partida_item (
     CONSTRAINT fk_pi_item    FOREIGN KEY (item_id)    REFERENCES item(id)
 );
 
-CREATE TABLE partida_runa (
+CREATE TABLE IF NOT EXISTS partida_runa (
     partida_id BIGINT NOT NULL,
     runa_id BIGINT NOT NULL,
     PRIMARY KEY (partida_id, runa_id),
