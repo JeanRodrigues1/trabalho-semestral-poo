@@ -6,6 +6,7 @@ import java.sql.SQLException;
 
 import br.com.jean.lolapirest.config.Database;
 
+
 public class PartidaItemDAO {
 
     public void inserirPartidaItem(Long partidaId, Long itemId){
