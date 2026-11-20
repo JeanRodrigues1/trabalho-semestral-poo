@@ -51,9 +51,9 @@ public class RunaController implements HttpHandler {
 
         String nome = extrairValor(corpo, "nome");
         String caminho = extrairValor(corpo, "caminho");
-        String tipo = extrairValor(corpo, "tipo");
+        String tipoRuna = extrairValor(corpo, "tipo_runa");
 
-        Runa runa = new Runa(nome, Caminho.valueOf(caminho), TipoRuna.valueOf(tipo));
+        Runa runa = new Runa(nome, Caminho.valueOf(caminho), TipoRuna.valueOf(tipoRuna));
 
         runaDAO.inserirRuna(runa);
 
