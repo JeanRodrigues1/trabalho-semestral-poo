@@ -61,8 +61,8 @@ public class RunaDAO {
             PreparedStatement atualizar = conexao.prepareStatement(sql)) {
 
             atualizar.setString(1, runa.getNome());
-            atualizar.setString(2, runa.getTipo().name());
-            atualizar.setString(3, runa.getCaminho().name());
+            atualizar.setString(2, runa.getCaminho().name());
+            atualizar.setString(3, runa.getTipo().name());
             atualizar.setLong(4, runa.getId());
             atualizar.executeUpdate();
         } catch (SQLException e) {

@@ -107,4 +107,55 @@ public class PartidaDAO {
             throw new RuntimeException("Erro ao buscar partida por id.", e);
         }
     }
+
+    public java.util.List<Partida> listarPorJogador(Long jogadorId) {
+        String sql = "select id, jogador_id, campeao_id, data, duracao_min, role, abates, mortes, assistencias, resultado, tipo, pdl_variacao, modo_jogo from partida where jogador_id = ? order by id";
+
+        java.util.List<Partida> partidas = new java.util.ArrayList<>();
+
+        try (Connection conexao = Database.getConnection();
+            PreparedStatement buscar = conexao.prepareStatement(sql)) {
+
+            buscar.setLong(1, jogadorId);
+            ResultSet resultado = buscar.executeQuery();
+
+            while (resultado.next()) {
+                Jogador jogador = jogadorDAO.buscarPorId(resultado.getLong("jogador_id"));
+                Campeao campeao = campeaoDAO.buscarPorId(resultado.getLong("campeao_id"));
+
+                LocalDateTime data = resultado.getTimestamp("data").toLocalDateTime();
+                Role role = Role.valueOf(resultado.getString("role"));
+                Resultado resultadoPartida = Resultado.valueOf(resultado.getString("resultado"));
+
+                Integer pdlVariacao = null;
+                if (resultado.getObject("pdl_variacao") != null) {
+                    pdlVariacao = resultado.getInt("pdl_variacao");
+                }
+
+                Partida partida;
+                if (pdlVariacao != null) {
+                    partida = new PartidaRanqueada(
+                        jogador, campeao, data, resultado.getInt("duracao_min"), role,
+                        resultado.getInt("abates"), resultado.getInt("mortes"),
+                        resultado.getInt("assistencias"), resultadoPartida, pdlVariacao
+                    );
+                } else {
+                    partida = new PartidaCasual(
+                        jogador, campeao, data, resultado.getInt("duracao_min"), role,
+                        resultado.getInt("abates"), resultado.getInt("mortes"),
+                        resultado.getInt("assistencias"), resultadoPartida,
+                        resultado.getString("modo_jogo")
+                    );
+                }
+
+                partida.setId(resultado.getLong("id"));
+                partidas.add(partida);
+            }
+
+            return partidas;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao listar partidas do jogador.", e);
+        }
+    }
 }

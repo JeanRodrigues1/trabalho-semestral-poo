@@ -2,7 +2,7 @@
 
 ## Descrição
 Projeto de API REST desenvolvido em Java focado na implementação dos pilares da Programação Orientada a Objetos.
-O sistema modela entidades básicas relacionadas a partidas de League of Legends, permitindo operações CRUD.
+O sistema modela entidades básicas relacionadas a partidas de League of Legends, permitindo operações CRUD e busca do histórico de partidas de um jogador.
 
 ## Tecnologias Utilizadas
 - Java 21
@@ -36,10 +36,69 @@ ou
 - `config/` — configuração de conexão com o banco
 
 ## Regras de Negócio 
-- Cada partida deve ter exatamente 6 runas: 1 CHAVE e 5 MENOR. 
+- Cada partida deve ter exatamente 6 runas: 2 CHAVE e 4 MENOR. 
 - Cada partida pode ter no máximo 6 itens, sendo no máximo 1 do tipo BOTA.
+- Não é possível deletar uma entidade que ainda esteja vinculada a outro registro (por exemplo, um item que já foi usado em uma partida).
+- Partida é uma entidade imutável: não pode ser deletada nem editada.
 
 ## Endpoints
+
+### Histórico de Partidas 
+- GET `/jogadores/{id}/partidas`
+
+**Exemplo de retorno:**
+```json
+[
+    {
+        "id": 1,
+        "campeao_id": 1,
+        "duracao_min": 30,
+        "role": "MID",
+        "abates": 5,
+        "mortes": 2,
+        "assistencias": 7,
+        "resultado": "VITORIA",
+        "tipo": "RANQUEADA",
+        "data": "2026-11-20T17:01:50.765675"
+    },
+    {
+        "id": 2,
+        "campeao_id": 1,
+        "duracao_min": 30,
+        "role": "MID",
+        "abates": 5,
+        "mortes": 2,
+        "assistencias": 7,
+        "resultado": "VITORIA",
+        "tipo": "RANQUEADA",
+        "data": "2026-11-20T17:03:16.942897"
+    },
+    {
+        "id": 3,
+        "campeao_id": 1,
+        "duracao_min": 30,
+        "role": "MID",
+        "abates": 5,
+        "mortes": 2,
+        "assistencias": 7,
+        "resultado": "VITORIA",
+        "tipo": "RANQUEADA",
+        "data": "2026-11-20T17:04:13.510761"
+    },
+    {
+        "id": 4,
+        "campeao_id": 1,
+        "duracao_min": 30,
+        "role": "MID",
+        "abates": 5,
+        "mortes": 2,
+        "assistencias": 7,
+        "resultado": "VITORIA",
+        "tipo": "RANQUEADA",
+        "data": "2026-11-20T19:38:47.260817"
+    }
+]
+```
 
 ### Jogadores
 - POST `/jogadores`
@@ -78,7 +137,7 @@ ou
 
 ## Como Testar
 - Usar Postman
-- Valores de qualquer tipo devem estar entre aspas:
+- Valores de qualquer tipo devem estar entre aspas (Inclusive inteiros):
 ```json
 {
     "exemploString":"String1",
