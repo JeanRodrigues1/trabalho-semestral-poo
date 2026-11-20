@@ -9,12 +9,15 @@ import br.com.jean.lolapirest.dao.PartidaDAO;
 import br.com.jean.lolapirest.dao.PartidaItemDAO;
 import br.com.jean.lolapirest.dao.PartidaRunaDAO;
 import br.com.jean.lolapirest.model.Campeao;
+import br.com.jean.lolapirest.model.Item;
 import br.com.jean.lolapirest.model.Jogador;
 import br.com.jean.lolapirest.model.Partida;
 import br.com.jean.lolapirest.model.PartidaCasual;
 import br.com.jean.lolapirest.model.PartidaRanqueada;
 import br.com.jean.lolapirest.model.Resultado;
 import br.com.jean.lolapirest.model.Role;
+import br.com.jean.lolapirest.model.Runa;
+import br.com.jean.lolapirest.service.PartidaService;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -28,6 +31,7 @@ public class PartidaController implements HttpHandler {
     private final CampeaoDAO campeaoDAO = new CampeaoDAO();
     private final PartidaItemDAO partidaItemDAO = new PartidaItemDAO();
     private final PartidaRunaDAO partidaRunaDAO = new PartidaRunaDAO();
+    private final PartidaService partidaService = new PartidaService();
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
@@ -53,7 +57,8 @@ public class PartidaController implements HttpHandler {
 
     private void criar(HttpExchange exchange) throws IOException {
         String corpo = lerCorpo(exchange);
-
+        partidaService.validarRunas(extrairValor(corpo, "runas"));
+        partidaService.validarItens(extrairValor(corpo, "itens"));
         Jogador jogador = jogadorDAO.buscarPorId(Long.parseLong(extrairValor(corpo, "jogador_id")));
         Campeao campeao = campeaoDAO.buscarPorId(Long.parseLong(extrairValor(corpo, "campeao_id")));
         if (jogador == null || campeao == null) {
@@ -105,6 +110,35 @@ public class PartidaController implements HttpHandler {
             return;
         }
 
+        java.util.List<Item> itens = partidaItemDAO.listarItensPorPartida(id);
+        java.util.List<Runa> runas = partidaRunaDAO.listarRunasPorPartida(id);
+
+        StringBuilder itensJson = new StringBuilder("[");
+        for (int i = 0; i < itens.size(); i++) {
+            if (i > 0) itensJson.append(", ");
+            Item item = itens.get(i);
+            itensJson.append("{")
+                .append("\"id\": ").append(item.getId()).append(", ")
+                .append("\"nome\": \"").append(item.getNome()).append("\", ")
+                .append("\"custo\": ").append(item.getCusto()).append(", ")
+                .append("\"tipo_item\": \"").append(item.getTipo()).append("\"")
+                .append("}");
+        }
+        itensJson.append("]");
+
+        StringBuilder runasJson = new StringBuilder("[");
+        for (int i = 0; i < runas.size(); i++) {
+            if (i > 0) runasJson.append(", ");
+            Runa runa = runas.get(i);
+            runasJson.append("{")
+                .append("\"id\": ").append(runa.getId()).append(", ")
+                .append("\"nome\": \"").append(runa.getNome()).append("\", ")
+                .append("\"caminho\": \"").append(runa.getCaminho()).append("\", ")
+                .append("\"tipo_runa\": \"").append(runa.getTipo()).append("\"")
+                .append("}");
+        }
+        runasJson.append("]");
+
         String json = "{"
             + "\"id\": " + partida.getId() + ", "
             + "\"jogador_id\": " + partida.getJogador().getId() + ", "
@@ -116,6 +150,8 @@ public class PartidaController implements HttpHandler {
             + "\"assistencias\": " + partida.getAssistencias() + ", "
             + "\"resultado\": \"" + partida.getResultado() + "\", "
             + "\"data\": \"" + partida.getData() + "\""
+            + "\"itens\": " + itensJson.toString() + ", "
+            + "\"runas\": " + runasJson.toString()
             + "}";
 
         enviarResposta(exchange, 200, json);
