@@ -13,14 +13,15 @@ import br.com.jean.lolapirest.model.TipoRuna;
 public class RunaDAO {
 
     public void inserirRuna(Runa runa){
-        String sql = "insert into runa (nome, tipo, caminho) values (?, ?, ?)";
+        String sql = "insert into runa (nome, caminho, tipo) values (?, ?, ?)";
 
         try (Connection conexao = Database.getConnection();
             PreparedStatement inserir = conexao.prepareStatement(sql)) {
 
         inserir.setString(1, runa.getNome());
-        inserir.setString(2, runa.getTipo().name());
-        inserir.setString(3, runa.getCaminho().name());
+        inserir.setString(2, runa.getCaminho().name());
+        inserir.setString(3, runa.getTipo().name());
+
         inserir.executeUpdate();
         
         } catch (SQLException e) {
@@ -29,7 +30,7 @@ public class RunaDAO {
     }
 
     public Runa buscarPorId(Long id) {
-    String sql = "select id, nome, tipo, caminho from runa where id = ?";
+    String sql = "select id, nome, caminho, tipo from runa where id = ?";
 
         try (Connection conexao = Database.getConnection();
             PreparedStatement buscar = conexao.prepareStatement(sql)) {
@@ -38,8 +39,9 @@ public class RunaDAO {
             if (resultado.next()) {
                 Long idEncontrado = resultado.getLong("id");
                 String nome = resultado.getString("nome");
-                String tipo = resultado.getString("tipo");
                 String caminho = resultado.getString("caminho");
+                String tipo = resultado.getString("tipo");
+
 
                 Runa runa = new Runa(nome, Caminho.valueOf(caminho), TipoRuna.valueOf(tipo));
                 runa.setId(idEncontrado);
@@ -53,7 +55,7 @@ public class RunaDAO {
     }
 
     public void atualizarRuna(Runa runa) {
-        String sql = "update runa set nome = ?, tipo = ?, caminho = ? where id = ?";
+        String sql = "update runa set nome = ?, caminho = ?, tipo = ? where id = ?";
 
         try (Connection conexao = Database.getConnection();
             PreparedStatement atualizar = conexao.prepareStatement(sql)) {

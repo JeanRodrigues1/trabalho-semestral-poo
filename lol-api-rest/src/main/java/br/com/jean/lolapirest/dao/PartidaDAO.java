@@ -22,10 +22,10 @@ public class PartidaDAO {
 
 
     public void inserirPartida(Partida partida){
-        String sql = "insert into partida (jogador_id, campeao_id, data, duracao_min, role, abates, mortes, assistencias, resultado, tipo, pdl_variacao, modo_jogo) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "insert into partida (jogador_id, campeao_id, data, duracao_min, role, abates, mortes, assistencias, resultado, tipo, pdl_variacao, modo_jogo) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conexao = Database.getConnection();
-            PreparedStatement inserir = conexao.prepareStatement(sql)) {
+            PreparedStatement inserir = conexao.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS)) {
 
         inserir.setLong(1, partida.getJogador().getId());
         inserir.setLong(2, partida.getCampeao().getId());
@@ -48,7 +48,12 @@ public class PartidaDAO {
             inserir.setNull(12, java.sql.Types.VARCHAR);
         }
         inserir.executeUpdate();
-        
+
+        try (ResultSet chaves = inserir.getGeneratedKeys()) {
+            if (chaves.next()) {
+                partida.setId(chaves.getLong(1));
+            }
+        }
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao inserir partida.", e);
         }
