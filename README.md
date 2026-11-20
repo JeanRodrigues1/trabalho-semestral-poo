@@ -35,6 +35,10 @@ ou
 - `model/` — entidades e enums
 - `config/` — configuração de conexão com o banco
 
+## Regras de Negócio 
+- Cada partida deve ter exatamente 6 runas: 1 CHAVE e 5 MENOR. 
+- Cada partida pode ter no máximo 6 itens, sendo no máximo 1 do tipo BOTA.
+
 ## Endpoints
 
 ### Jogadores
