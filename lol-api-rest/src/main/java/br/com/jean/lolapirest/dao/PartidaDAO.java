@@ -22,31 +22,30 @@ public class PartidaDAO {
 
 
     public void inserirPartida(Partida partida){
-        String sql = "insert into partida (id, jogador_id, campeao_id, data, duracao_min, role, abates, mortes, assistencias, resultado, tipo, pdl_variacao, modo_jogo) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "insert into partida (jogador_id, campeao_id, data, duracao_min, role, abates, mortes, assistencias, resultado, tipo, pdl_variacao, modo_jogo) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conexao = Database.getConnection();
             PreparedStatement inserir = conexao.prepareStatement(sql)) {
 
-        inserir.setLong(1, partida.getId());
-        inserir.setLong(2, partida.getJogador().getId());
-        inserir.setLong(3, partida.getCampeao().getId());
-        inserir.setTimestamp(4, Timestamp.valueOf(partida.getData()));
-        inserir.setInt(5, partida.getDuracaoMin());
-        inserir.setString(6, partida.getRole().name());
-        inserir.setInt(7, partida.getAbates());
-        inserir.setInt(8, partida.getMortes());
-        inserir.setInt(9, partida.getAssistencias());
-        inserir.setString(10, partida.getResultado().name());
-        inserir.setString(11, partida.getTipo());
+        inserir.setLong(1, partida.getJogador().getId());
+        inserir.setLong(2, partida.getCampeao().getId());
+        inserir.setTimestamp(3, Timestamp.valueOf(partida.getData()));
+        inserir.setInt(4, partida.getDuracaoMin());
+        inserir.setString(5, partida.getRole().name());
+        inserir.setInt(6, partida.getAbates());
+        inserir.setInt(7, partida.getMortes());
+        inserir.setInt(8, partida.getAssistencias());
+        inserir.setString(9, partida.getResultado().name());
+        inserir.setString(10, partida.getTipo());
         if (partida instanceof PartidaRanqueada partidaRanqueada) {
-            inserir.setInt(12, partidaRanqueada.getPdlVariacao());
-            inserir.setNull(13, java.sql.Types.VARCHAR);
+            inserir.setInt(11, partidaRanqueada.getPdlVariacao());
+            inserir.setNull(12, java.sql.Types.VARCHAR);
         } else if (partida instanceof PartidaCasual partidaCasual) {
-            inserir.setNull(12, java.sql.Types.INTEGER);
-            inserir.setString(13, partidaCasual.getModoJogo());
+            inserir.setNull(11, java.sql.Types.INTEGER);
+            inserir.setString(12, partidaCasual.getModoJogo());
         } else {
-            inserir.setNull(12, java.sql.Types.INTEGER);
-            inserir.setNull(13, java.sql.Types.VARCHAR);
+            inserir.setNull(11, java.sql.Types.INTEGER);
+            inserir.setNull(12, java.sql.Types.VARCHAR);
         }
         inserir.executeUpdate();
         

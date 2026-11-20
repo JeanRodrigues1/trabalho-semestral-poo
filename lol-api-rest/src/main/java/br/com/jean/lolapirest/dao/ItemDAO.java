@@ -12,15 +12,14 @@ import br.com.jean.lolapirest.model.TipoItem;
 public class ItemDAO {
 
     public void inserirItem(Item item){
-        String sql = "insert into item (id, nome, custo, tipo) values (?, ?, ?, ?)";
+        String sql = "insert into item (nome, custo, tipo) values (?, ?, ?)";
 
         try (Connection conexao = Database.getConnection();
             PreparedStatement inserir = conexao.prepareStatement(sql)) {
 
-        inserir.setLong(1, item.getId());
-        inserir.setString(2, item.getNome());
-        inserir.setDouble(3, item.getCusto());
-        inserir.setString(4, item.getTipo().name());
+        inserir.setString(1, item.getNome());
+        inserir.setDouble(2, item.getCusto());
+        inserir.setString(3, item.getTipo().name());
         inserir.executeUpdate();
         
         } catch (SQLException e) {

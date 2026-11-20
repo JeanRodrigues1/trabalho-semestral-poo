@@ -13,14 +13,13 @@ import br.com.jean.lolapirest.model.ClassePrincipal;
 public class CampeaoDAO {
 
     public void inserirCampeao(Campeao campeao){
-        String sql = "insert into campeao (id, nome, classe_principal) values (?, ?, ?)";
+        String sql = "insert into campeao (nome, classe_principal) values (?, ?)";
 
         try (Connection conexao = Database.getConnection();
             PreparedStatement inserir = conexao.prepareStatement(sql)) {
 
-        inserir.setLong(1, campeao.getId());
-        inserir.setString(2, campeao.getNome());
-        inserir.setString(3, campeao.getClassePrincipal().name());
+        inserir.setString(1, campeao.getNome());
+        inserir.setString(2, campeao.getClassePrincipal().name());
         inserir.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao inserir campeão.", e);

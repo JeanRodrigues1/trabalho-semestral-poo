@@ -13,15 +13,14 @@ import br.com.jean.lolapirest.model.TipoRuna;
 public class RunaDAO {
 
     public void inserirRuna(Runa runa){
-        String sql = "insert into runa (id, nome, tipo, caminho) values (?, ?, ?, ?)";
+        String sql = "insert into runa (nome, tipo, caminho) values (?, ?, ?)";
 
         try (Connection conexao = Database.getConnection();
             PreparedStatement inserir = conexao.prepareStatement(sql)) {
 
-        inserir.setLong(1, runa.getId());
-        inserir.setString(2, runa.getNome());
-        inserir.setString(3, runa.getTipo().name());
-        inserir.setString(4, runa.getCaminho().name());
+        inserir.setString(1, runa.getNome());
+        inserir.setString(2, runa.getTipo().name());
+        inserir.setString(3, runa.getCaminho().name());
         inserir.executeUpdate();
         
         } catch (SQLException e) {
