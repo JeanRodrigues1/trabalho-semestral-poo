@@ -183,7 +183,7 @@ ou
   "tipo":"RANQUEADA",
   "pdl_variacao":"18",
   "itens":"1",
-  "runas":"1"
+  "runas":"1,2,3,4,5,6"
 }
 ```
 **POST PARTIDA CASUAL**
@@ -200,6 +200,6 @@ ou
   "tipo":"CASUAL",
   "modo_jogo":"NORMAL GAME",
   "itens":"1",
-  "runas":"1"
+  "runas":"1,2,3,4,5,6"
 }
 ```
